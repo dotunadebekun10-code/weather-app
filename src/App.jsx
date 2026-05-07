@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import './App.css'
 
@@ -72,40 +73,70 @@ function App() {
               {loading ? "Loading..." : "Search"}
             </button>
           </div>
-          {error && (
-            <p className="bg-red-100 text-red-700 px-4 py-2 rounded-lg mt-3 border border-red-200">{error}</p>
-          )}
+          <AnimatePresence mode="wait">
+            {error && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="bg-red-100 text-red-700 px-4 py-2 rounded-lg mt-3 border border-red-200"
+              >
+                {error}
+              </motion.p>
+            )}
 
-          {weather && (
-            <div className='border border-white/20 shadow-xl mt-4 bg-white/30 backdrop-blur-md p-4 rounded-2xl '>
-              <div className="flex items-center justify-between my-4">
-                <p className='text-5xl font-black text-white'>{Math.round(weather.main.temp)}°C</p>
-                <img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`} alt={weather.weather[0].description} className='w-24 drop-shadow-lg' />
-              </div>
-
-              <div className='flex items-center justify-between '>
-                <h2 className='text-xl font-bold text-white'>{weather.name}</h2>
-                <p className='text-white'>{weather.sys.country}</p>
-              </div>
-
-              {/* bottom grid */}
-              <div className="grid grid-cols-3 gap-4 mt-6 border-t border-white/20 pt-4 text-white">
-                <div className="flex flex-col items-center bg-white/10 p-2 rounded-lg">
-                  <p className='text-white font-semibold text-xs uppercase'>Humidity</p>
-                  <p className='mt-2 text-lg font-bold'>{weather.main.humidity}%</p>
+            {weather && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className='border border-white/20 shadow-xl mt-4 bg-white/30 backdrop-blur-md p-4 rounded-2xl '
+              >
+                <div className="flex items-center justify-between my-4">
+                  <p className='text-5xl font-black text-white'>{Math.round(weather.main.temp)}°C</p>
+                  <motion.img
+                    initial={{ rotate: -10, scale: 0.8 }}
+                    animate={{ rotate: 0, scale: 1 }}
+                    transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
+                    src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}
+                    alt={weather.weather[0].description}
+                    className='w-24 drop-shadow-lg'
+                  />
                 </div>
-                <div className="flex flex-col items-center bg-white/10 p-2 rounded-lg">
-                  <p className='text-white font-semibold text-xs uppercase'>Conditions</p>
-                  <p className='mt-2 text-sm font-bold capitalize'>{weather.weather[0].description}</p>
-                </div>
-                <div className="flex flex-col items-center bg-white/10 p-2 rounded-lg">
-                  <p className='text-white font-semibold text-xs uppercase'>Feels Like</p>
-                  <p className='mt-2 text-md font-bold'>{Math.round(weather.main.feels_like)}°C</p>
+
+                <div className='flex items-center justify-between '>
+                  <h2 className='text-xl font-bold text-white'>{weather.name}</h2>
+                  <p className='text-white'>{weather.sys.country}</p>
                 </div>
 
-              </div>
-            </div>
-          )}
+                {/* bottom grid */}
+                <div className="grid grid-cols-3 gap-4 mt-6 border-t border-white/20 pt-4 text-white">
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    className="flex flex-col items-center bg-white/10 p-2 rounded-lg"
+                  >
+                    <p className='text-white font-semibold text-xs uppercase'>Humidity</p>
+                    <p className='mt-2 text-lg font-bold'>{weather.main.humidity}%</p>
+                  </motion.div>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    className="flex flex-col items-center bg-white/10 p-2 rounded-lg"
+                  >
+                    <p className='text-white font-semibold text-xs uppercase'>Conditions</p>
+                    <p className='mt-2 text-sm font-bold capitalize'>{weather.weather[0].description}</p>
+                  </motion.div>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    className="flex flex-col items-center bg-white/10 p-2 rounded-lg"
+                  >
+                    <p className='text-white font-semibold text-xs uppercase'>Feels Like</p>
+                    <p className='mt-2 text-md font-bold'>{Math.round(weather.main.feels_like)}°C</p>
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
 
         </div>
